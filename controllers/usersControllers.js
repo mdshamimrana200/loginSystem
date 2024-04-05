@@ -2,6 +2,7 @@ const path = require("path")
 const userSchema = require("../models/userSchema")
 const bcrypt = require("bcrypt")
 const passport = require("passport")
+const { v4 } = require("uuid")
 
 //register : post
 const postRegister =async (req,res)=>{
@@ -14,6 +15,7 @@ const postRegister =async (req,res)=>{
             bcrypt.hash(password,10,async(err,hash)=>{
                 
                 const newUser = new userSchema({
+                    id:v4(),
                     name,email,password:hash
                 })
                 await newUser.save()
@@ -65,6 +67,14 @@ const getLogout = (req,res,next)=>{
         }
     });
 
+
 }
 
-module.exports = {getRegister,postRegister,getLogin,postlogin,getProfile,checkUser,getLogout}
+const getfirstGoogleAuth = (rq,rs,nx)=>{
+    passport.authenticate("google", { scope: ["profile"] })(rq,rs,nx)
+}
+const getGoogleAuth = (rq,rs,nx)=>{
+    passport.authenticate('google', { failureRedirect: '/account/login',successRedirect:"/account/profile" })(rq,rs,nx)
+}
+
+module.exports = {getRegister,postRegister,getLogin,postlogin,getProfile,checkUser,getLogout,getGoogleAuth,getfirstGoogleAuth}

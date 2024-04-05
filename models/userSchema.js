@@ -4,7 +4,7 @@ const { v4 } = require("uuid");
 const userScheema = mongoose.Schema({
     id:{
         type:String,
-        default: v4()
+        require:true
     },
     name:{
         type:String,
@@ -12,11 +12,11 @@ const userScheema = mongoose.Schema({
     },
     email:{
         type:String,
-        require:true
+        
     },
     password:{
         type:String,
-        require:true
+     
     },
     ceratedON:{
         type:Date,
